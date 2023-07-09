@@ -124,7 +124,7 @@ public class MouseDraw : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         tex2d.ReadPixels(new Rect(0, 0, mainTex.width, mainTex.height), 0, 0);
 
         var col = IsEraser ? backgroundColour : penColour;
-        var rad = IsEraser ? 6 : penRadius;
+        var rad = IsEraser ? 16 : penRadius;
         var positions = m_lastPos.HasValue ? GetLinearPositions(m_lastPos.Value, pos) : new List<Vector2>() { pos };
 
         foreach (var position in positions)
