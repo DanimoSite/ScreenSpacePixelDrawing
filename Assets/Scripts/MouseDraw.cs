@@ -21,7 +21,7 @@ public class MouseDraw : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public Color32 penColour = new Color32(0, 0, 0, 255);
 
     [Tooltip("The Drawing Background Colour.")]
-    public Color32 backroundColour = new Color32(0,0,0,0);
+    public Color32 backgroundColour = new Color32(255,255,255,255);
 
     [SerializeField]
     [Tooltip("Pen Pointer Graphic GameObject")]
@@ -89,12 +89,12 @@ public class MouseDraw : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         // Set scale Factor...
         m_scaleFactor = HostCanvas.scaleFactor * 2;
 
-        var tex = new Texture2D(Convert.ToInt32(Screen.width/m_scaleFactor), Convert.ToInt32(Screen.height/m_scaleFactor), TextureFormat.RGBA32, false);
+        var tex = new Texture2D(Convert.ToInt32(Screen.width/m_scaleFactor), Convert.ToInt32(Screen.height/m_scaleFactor));
         for (int i = 0; i < tex.width; i++)
         {
             for (int j = 0; j < tex.height; j++)
             {
-                tex.SetPixel(i, j, backroundColour);
+                tex.SetPixel(i, j, backgroundColour);
             }
         }
 
@@ -107,7 +107,10 @@ public class MouseDraw : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     /// </summary>
     /// <param name="pos"></param>
     private void WritePixels(Vector2 pos)
-    {
+    {  
+
+        //pos = Camera.main.ScreenToWorldPoint(pos);
+
         pos /= m_scaleFactor;
         var mainTex = m_image.texture;
         var tex2d = new Texture2D(mainTex.width, mainTex.height, TextureFormat.RGBA32, false);
@@ -120,12 +123,13 @@ public class MouseDraw : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         tex2d.ReadPixels(new Rect(0, 0, mainTex.width, mainTex.height), 0, 0);
 
-        var col = IsEraser ? backroundColour : penColour;
+        var col = IsEraser ? backgroundColour : penColour;
+        var rad = IsEraser ? 6 : penRadius;
         var positions = m_lastPos.HasValue ? GetLinearPositions(m_lastPos.Value, pos) : new List<Vector2>() { pos };
 
         foreach (var position in positions)
         {
-            var pixels = GetNeighbouringPixels(new Vector2(mainTex.width, mainTex.height), position, penRadius);
+            var pixels = GetNeighbouringPixels(new Vector2(mainTex.width, mainTex.height), position, rad);
 
             if (pixels.Count > 0)
                 foreach (var p in pixels)
@@ -153,13 +157,14 @@ public class MouseDraw : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public void ClearTexture()
     {
         var mainTex = m_image.texture;
+        Debug.Log(mainTex.height);
         var tex2d = new Texture2D(mainTex.width, mainTex.height, TextureFormat.RGBA32, false);
 
         for (int i = 0; i < tex2d.width; i++)
         {
             for (int j = 0; j < tex2d.height; j++)
             {
-                tex2d.SetPixel(i, j, backroundColour);
+                tex2d.SetPixel(i, j, backgroundColour);
             }
         }
 

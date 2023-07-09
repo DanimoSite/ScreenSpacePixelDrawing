@@ -9,8 +9,8 @@ public class ColourPaletteView : MonoBehaviour
     [SerializeField]
     private MouseDraw MouseDrawComponent;
 
-    [SerializeField]
-    private ColourWheel ColourWheel;
+    // [SerializeField]
+    // private ColourWheel ColourWheel;
 
     [SerializeField]
     private Slider penWidth;
@@ -32,7 +32,7 @@ public class ColourPaletteView : MonoBehaviour
         if (!Directory.Exists(SaveDirectory))
             SaveDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-        ColourWheel.ColourChanged += OnPenColourChanged;
+        // ColourWheel.ColourChanged += OnPenColourChanged;
         penWidth.onValueChanged.AddListener(OnPenWidthChanged);
         eraser.onValueChanged.AddListener(OnEraserToggled);
         clearButton.onClick.AddListener(OnClearDrawing);
@@ -48,7 +48,7 @@ public class ColourPaletteView : MonoBehaviour
 
     private void OnDisable()
     {
-        ColourWheel.ColourChanged -= OnPenColourChanged;
+        // ColourWheel.ColourChanged -= OnPenColourChanged;
         penWidth.onValueChanged.RemoveListener(OnPenWidthChanged);
         eraser.onValueChanged.RemoveListener(OnEraserToggled);
         clearButton.onClick.RemoveListener(OnClearDrawing);
